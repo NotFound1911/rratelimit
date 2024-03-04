@@ -22,6 +22,7 @@ func (f *FixWindowLimiter) Allow(ctx context.Context) (bool, error) {
 }
 
 var _ Limiter = &FixWindowLimiter{}
+var _ Creator = NewFixWindowLimiter
 
 func NewFixWindowLimiter(client redis.Cmdable, service string,
 	interval time.Duration, rate int) Limiter {
@@ -31,13 +32,4 @@ func NewFixWindowLimiter(client redis.Cmdable, service string,
 		interval: interval,
 		rate:     rate,
 	}
-}
-
-type enableFixWindowLimiter struct {
-}
-
-func (f *FixWindowLimiter) isEnabled(ctx context.Context) bool {
-	res := ctx.Value(enableFixWindowLimiter{})
-	enable, ok := res.(bool)
-	return ok && enable
 }

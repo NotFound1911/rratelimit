@@ -7,12 +7,12 @@ import (
 )
 
 type MiddlewareBuilder struct {
-	limiter limit.Limiter
+	limiter *limit.RateLimit
 }
 
 func (m *MiddlewareBuilder) Build() gin.HandlerFunc {
 	return func(context *gin.Context) {
-		allow, err := m.limiter.Allow(context)
+		allow, err := m.limiter.Limiter.Allow(context)
 		if err != nil || !allow {
 			context.AbortWithStatusJSON(http.StatusInternalServerError, "限流")
 			return

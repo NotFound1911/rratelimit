@@ -16,7 +16,7 @@ func TestMiddlewareBuilder_Build(t *testing.T) {
 		DB:       0,  // use default DB
 	})
 	builder := MiddlewareBuilder{
-		limiter: limit.NewFixWindowLimiter(rdb, "test", time.Second, 1),
+		limiter: limit.NewRateLimit(rdb, "test", time.Second, 1, limit.WithSideWindow()),
 	}
 	r := gin.Default()
 	r.Use(builder.Build())
